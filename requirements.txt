@@ -1,0 +1,7 @@
+google-antigravity
+fastapi
+uvicorn
+duckduckgo-search
+pydantic>=2.0
+jinja2
+httpx

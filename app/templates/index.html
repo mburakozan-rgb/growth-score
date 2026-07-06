@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth Intelligence Platform - AI Era</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #070b19;
+            --panel-bg: rgba(15, 23, 42, 0.55);
+            --panel-border: rgba(255, 255, 255, 0.06);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-primary: #00f2fe;
+            --accent-secondary: #4facfe;
+            --accent-gradient: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(15, 32, 67, 0.6) 0%, rgba(7, 11, 25, 1) 90%),
+                radial-gradient(circle at 90% 80%, rgba(26, 17, 56, 0.4) 0%, rgba(7, 11, 25, 0.2) 70%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--panel-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: var(--accent-gradient);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.25rem;
+            font-weight: 800;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            flex: 1;
+            width: 100%;
+            height: calc(100vh - 4.5rem);
+        }
+
+        /* Sidebar Style */
+        .sidebar {
+            background: rgba(10, 16, 32, 0.5);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid var(--panel-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-section-title {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-control {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-control:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.15);
+        }
+
+        textarea.input-control {
+            resize: none;
+            height: 100px;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #070b19;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .company-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .company-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        .company-item.active {
+            background: rgba(0, 242, 254, 0.06);
+            border-color: var(--accent-primary);
+            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.05);
+        }
+
+        .company-info-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .company-name-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .company-industry-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .score-pill {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .score-high {
+            color: var(--accent-success);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .score-mid {
+            color: var(--accent-warning);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .score-low {
+            color: var(--accent-danger);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Main Workspace Style */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Dashboard Summary Hero */
+        .company-hero {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-details h1 {
+            font-family: var(--font-display);
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-details .industry-tag {
+            color: var(--accent-primary);
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .hero-details p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .overall-score-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(rgba(15, 23, 42, 0.8) 40%, transparent 100%);
+            border: 3px solid var(--accent-primary);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+            text-align: center;
+        }
+
+        .score-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Analytics Matrix Layout */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Telemetry Status Visuals */
+        .telemetry-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .telemetry-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .telemetry-icon {
+            font-size: 1.5rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 8px;
+            background: rgba(0, 242, 254, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-primary);
+        }
+
+        .telemetry-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .telemetry-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .telemetry-value {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        /* Pillar Breakdown Grid */
+        .pillars-list-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .pillar-card {
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-secondary);
+            box-shadow: 0 8px 24px rgba(79, 172, 254, 0.15);
+        }
+
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-secondary);
+            opacity: 0.5;
+        }
+
+        .pillar-card.top-performer::before {
+            background: var(--accent-success);
+        }
+
+        .pillar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .pillar-number-badge {
+            font-size: 0.7rem;
+            color: var(--accent-secondary);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .pillar-title {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .pillar-progress-wrapper {
+            margin-top: auto;
+        }
+
+        .pillar-score-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.25rem;
+        }
+
+        .p-score {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .p-score-max {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background: var(--accent-gradient);
+            height: 100%;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Opportunities vs Challenges Columns */
+        .opps-challs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .list-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .list-title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .list-title.opps {
+            color: var(--accent-success);
+        }
+
+        .list-title.challs {
+            color: var(--accent-warning);
+        }
+
+        .list-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            list-style: none;
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .list-item i {
+            margin-top: 0.25rem;
+        }
+
+        .list-item-success i {
+            color: var(--accent-success);
+        }
+
+        .list-item-warning i {
+            color: var(--accent-warning);
+        }
+
+        /* Dynamic Best Practices Section */
+        .best-practices-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .bp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .bp-card {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.03) 0%, rgba(79, 172, 254, 0.03) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .bp-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bp-pillar-badge {
+            font-size: 0.75rem;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .bp-description {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .bp-details {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            border-left: 2px solid var(--accent-primary);
+            padding-left: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Streaming Log Terminal Console Wrapper */
+        .terminal-panel-wrapper {
+            display: none;
+            grid-template-columns: 3fr 2fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .terminal-panel {
+            background: #020617;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 280px;
+        }
+
+        .tracker-panel {
+            background: #090d16;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .tracker-source-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .tracker-source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            transition: all 0.2s;
+        }
+
+        .tracker-source-item.active-research {
+            border-color: var(--accent-primary);
+            background: rgba(0, 242, 254, 0.03);
+        }
+
+        .tracker-source-label {
+            font-family: var(--font-display);
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .tracker-source-status {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .terminal-logs {
+            overflow-y: auto;
+            font-size: 0.8rem;
+            color: #38bdf8;
+            line-height: 1.5;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            scroll-behavior: smooth;
+        }
+
+        .terminal-log-entry {
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        .terminal-log-system {
+            color: var(--accent-success);
+            font-weight: 700;
+        }
+
+        .terminal-log-thought {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-body {
+            background: #0b0f19;
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-main);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .modal-header-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .modal-summary-pill-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+        }
+
+        .modal-confidence-badge {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .modal-confidence-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-success);
+        }
+
+        .modal-average-badge {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .modal-section-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-sw-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .modal-sw-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .modal-sw-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .modal-sw-card-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-sw-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .modal-evidence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .modal-evidence-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--panel-border);
+            border-left: 4px solid var(--accent-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .modal-evidence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .modal-evidence-date {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .modal-evidence-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .modal-evidence-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media(max-width: 1200px) {
+            .pillars-list-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .analytics-grid, .opps-challs-grid, .bp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media(max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--panel-border);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="logo-text">Growth-Antigravity</div>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-display); font-weight: 600;">
+            <i class="fa-solid fa-circle-dot" style="color: var(--accent-success); margin-right: 0.25rem;"></i> AI-AGE BENCHMARK PLATFORM
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Controls -->
+        <div class="sidebar">
+            <div class="input-group">
+                <div class="sidebar-section-title"><i class="fa-solid fa-magnifying-glass"></i> Analyze Brand</div>
+                <input type="text" id="companyInput" class="input-control" placeholder="Enter Company Name (e.g. Stripe)">
+                <textarea id="contextInput" class="input-control" placeholder="Optional: Paste recent articles, context notes, or PRs for continuous learning update..."></textarea>
+                <button id="analyzeBtn" class="btn-primary"><i class="fa-solid fa-play"></i> Evaluate Brand</button>
+            </div>
+            
+            <div class="input-group" style="margin-top: 1rem;">
+                <div class="sidebar-section-title"><i class="fa-solid fa-list"></i> Saved Companies</div>
+                <div id="companyList" class="company-list">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Workspace -->
+        <div class="main-content">
+            <!-- Terminal Console (Hidden by default, displayed during evaluation) -->
+            <!-- Terminal Console & Sources Tracker Wrapper -->
+            <div id="terminalPanelWrapper" class="terminal-panel-wrapper">
+                <div id="terminalPanel" class="terminal-panel">
+                    <div class="terminal-header">
+                        <span><i class="fa-solid fa-terminal"></i> Antigravity Agent Thoughts Stream</span>
+                        <span id="terminalStatus" style="font-weight: 700;">Running...</span>
+                    </div>
+                    <div id="terminalLogs" class="terminal-logs">
+                        <!-- Logs stream here -->
+                    </div>
+                </div>
+                
+                <div class="tracker-panel">
+                    <div class="terminal-header" style="color: var(--accent-secondary);">
+                        <span><i class="fa-solid fa-file-circle-check"></i> Research Sources Tracker</span>
+                        <span style="font-weight: 700; color: var(--text-muted);">Status</span>
+                    </div>
+                    <div id="trackerSourceList" class="tracker-source-list" style="margin-top: 0.5rem;">
+                        <div class="tracker-source-item" id="src-blog">
+                            <span class="tracker-source-label">Company Blog / Tech Blog</span>
+                            <span class="tracker-source-status" id="status-blog" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-youtube">
+                            <span class="tracker-source-label">Youtube Interviews</span>
+                            <span class="tracker-source-status" id="status-youtube" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-podcasts">
+                            <span class="tracker-source-label">Podcasts & Exec Audio</span>
+                            <span class="tracker-source-status" id="status-podcasts" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-pr">
+                            <span class="tracker-source-label">Public / Press Releases</span>
+                            <span class="tracker-source-status" id="status-pr" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-earnings">
+                            <span class="tracker-source-label">Earnings Call (financial)</span>
+                            <span class="tracker-source-status" id="status-earnings" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-articles">
+                            <span class="tracker-source-label">Articles & Teardowns</span>
+                            <span class="tracker-source-status" id="status-articles" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-recruitment">
+                            <span class="tracker-source-label">Recruitment Portals (Jobs)</span>
+                            <span class="tracker-source-status" id="status-recruitment" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-reddit">
+                            <span class="tracker-source-label">Reddit Forums / Feedback</span>
+                            <span class="tracker-source-status" id="status-reddit" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                        <div class="tracker-source-item" id="src-others">
+                            <span class="tracker-source-label">Others (Review sites, etc)</span>
+                            <span class="tracker-source-status" id="status-others" style="color: var(--text-muted);">⏳ Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Summary Info -->
+            <div class="glass-panel company-hero">
+                <div class="hero-details">
+                    <span id="heroIndustry" class="industry-tag">Metasearch Engine</span>
+                    <h1 id="heroName">Loading...</h1>
+                    <p id="heroSummary">Please wait while we pull evaluations.</p>
+                </div>
+                <div class="overall-score-display">
+                    <div id="heroScore" class="score-number">0.0</div>
+                    <div class="score-label">Maturity</div>
+                </div>
+            </div>
+
+            <!-- Tech Telemetry Grid -->
+            <div class="glass-panel">
+                <h3 class="sidebar-section-title" style="margin-bottom: 1rem;"><i class="fa-solid fa-satellite-dish"></i> API Telemetry Signals</h3>
+                <div class="telemetry-row">
+                    <div class="telemetry-card">
+                        <div class="telemetry-icon"><i class="fa-solid fa-robot"></i></div>
+                        <div class="telemetry-info">
+                            <span class="telemetry-label">Robots.txt Crawl</span>
+                            <span id="telRobots" class="telemetry-value">N/A</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-card">
+                        <div class="telemetry-icon"><i class="fa-solid fa-cubes"></i></div>
+                        <div class="telemetry-info">
+                            <span class="telemetry-label">Growth Stack Tools</span>
+                            <span id="telStack" class="telemetry-value" style="font-size: 0.8rem; line-height: 1.2;">N/A</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-card">
+                        <div class="telemetry-icon"><i class="fa-solid fa-star"></i></div>
+                        <div class="telemetry-info">
+                            <span class="telemetry-label">App Rating / Reviews</span>
+                            <span id="telApp" class="telemetry-value">N/A</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-card">
+                        <div class="telemetry-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div class="telemetry-info">
+                            <span class="telemetry-label">AEO Citations / 100</span>
+                            <span id="telAEO" class="telemetry-value">N/A</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts (Comparison & Trend) -->
+            <div class="analytics-grid">
+                <div class="glass-panel">
+                    <h3 class="sidebar-section-title"><i class="fa-solid fa-compass"></i> Radar Comparison Matrix</h3>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel">
+                    <h3 class="sidebar-section-title"><i class="fa-solid fa-timeline"></i> Score Trend History</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pillars Detail Grid -->
+            <div class="glass-panel">
+                <h3 class="sidebar-section-title" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-grip"></i> Eight Growth Pillars Capability Scorecard</h3>
+                <div id="pillarsGrid" class="pillars-list-grid">
+                    <!-- 8 pillars cards -->
+                </div>
+            </div>
+
+            <!-- Discovered Best Practices -->
+            <div id="bpSection" class="glass-panel best-practices-section">
+                <h3 class="sidebar-section-title"><i class="fa-solid fa-lightbulb"></i> Discovered Best Practices (Dynamic Standards)</h3>
+                <div id="bpGrid" class="bp-grid">
+                    <!-- Dynamic standards loaded -->
+                </div>
+            </div>
+
+            <!-- Opportunities vs Challenges -->
+            <div class="opps-challs-grid">
+                <div class="glass-panel list-card">
+                    <h3 class="list-title opps"><i class="fa-solid fa-arrow-trend-up"></i> Top Strategic Opportunities</h3>
+                    <ul id="oppsList" class="list-items">
+                        <!-- Loaded dynamically -->
+                    </ul>
+                </div>
+                <div class="glass-panel list-card">
+                    <h3 class="list-title challs"><i class="fa-solid fa-triangle-exclamation"></i> Critical Risks & Challenges</h3>
+                    <ul id="challsList" class="list-items">
+                        <!-- Loaded dynamically -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to show detailed pillar description and findings -->
+    <div id="pillarModal" class="modal">
+        <div class="modal-body">
+            <span class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></span>
+            
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <div id="modalPillarBadge" class="bp-pillar-badge">PILLAR 1</div>
+                <div id="modalHeaderMeta" class="modal-header-meta" style="margin: 0; font-family: var(--font-display); font-weight: 500;">Company · Foundation Layer</div>
+            </div>
+            
+            <h2 id="modalTitle" class="modal-title" style="margin-top: -0.25rem;">Product & Customer Experience Excellence</h2>
+            
+            <!-- Summary Info Pill Row -->
+            <div class="modal-summary-pill-row">
+                <div id="modalScorePill" class="score-pill score-high">8.4 — Leading</div>
+                <div class="modal-confidence-badge">
+                    <div class="modal-confidence-dot"></div>
+                    <span id="modalConfidenceText">High confidence · 9 sources</span>
+                </div>
+                <div class="modal-average-badge">
+                    <span id="modalPillarAverage">Market Average: 5.6</span>
+                </div>
+            </div>
+            
+            <!-- Score Rationale -->
+            <div>
+                <div class="modal-section-title"><i class="fa-solid fa-comment-dots" style="color: var(--accent-primary);"></i> Score Rationale</div>
+                <p id="modalRationaleText" class="modal-desc" style="line-height: 1.6; color: var(--text-main); font-size: 0.95rem;"></p>
+            </div>
+            
+            <!-- Strengths & Weaknesses side-by-side -->
+            <div class="modal-sw-grid">
+                <div class="modal-sw-column">
+                    <div class="modal-section-title" style="color: var(--accent-success);"><i class="fa-solid fa-thumbs-up"></i> Strengths Identified</div>
+                    <div id="modalStrengthsList" class="modal-evidence-list">
+                        <!-- strengths loaded dynamically -->
+                    </div>
+                </div>
+                
+                <div class="modal-sw-column">
+                    <div class="modal-section-title" style="color: var(--accent-warning);"><i class="fa-solid fa-triangle-exclamation"></i> Weaknesses Identified</div>
+                    <div id="modalWeaknessesList" class="modal-evidence-list">
+                        <!-- weaknesses loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Supporting Evidence list -->
+            <div>
+                <div id="modalEvidenceTitle" class="modal-section-title"><i class="fa-solid fa-file-invoice" style="color: var(--accent-secondary);"></i> Supporting Evidence (0 items)</div>
+                <div id="modalEvidenceList" class="modal-evidence-list" style="margin-top: 0.75rem;">
+                    <!-- evidence loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCompany = "";
+        let currentLatestEvaluation = null;
+        let radarChartInstance = null;
+        let trendChartInstance = null;
+        let allCompaniesCache = [];
+        let comparativeCompanies = []; // List of company names to compare in radar
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadCompanies();
+            // Select first company by default
+            if (allCompaniesCache.length > 0) {
+                // Auto compare Back Market, On Running and Skyscanner if they exist
+                comparativeCompanies = allCompaniesCache.map(c => c.name).filter(n => ["Back Market", "On Running", "Skyscanner"].includes(n));
+                if (comparativeCompanies.length === 0) {
+                    comparativeCompanies = [allCompaniesCache[0].name];
+                }
+                await selectCompany(allCompaniesCache[0].name);
+            }
+        });
+
+        async function loadCompanies() {
+            try {
+                const res = await fetch('/api/companies');
+                allCompaniesCache = await res.json();
+                
+                const listContainer = document.getElementById('companyList');
+                listContainer.innerHTML = '';
+                
+                allCompaniesCache.forEach(comp => {
+                    const activeClass = comp.name === currentCompany ? 'active' : '';
+                    const checkedState = comparativeCompanies.includes(comp.name) ? 'checked' : '';
+                    
+                    const score = parseFloat(comp.last_score).toFixed(1);
+                    let scoreClass = 'score-high';
+                    if (score < 5.0) scoreClass = 'score-low';
+                    else if (score < 8.0) scoreClass = 'score-mid';
+
+                    listContainer.innerHTML += `
+                        <div class="company-item ${activeClass}" onclick="selectCompany('${comp.name}')">
+                            <div class="company-info-main">
+                                <span class="company-name-label">${comp.name}</span>
+                                <span class="company-industry-label">${comp.industry || 'Unknown'}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" style="cursor: pointer;" ${checkedState} onclick="toggleComparative(event, '${comp.name}')" title="Add to Radar Comparison">
+                                <span class="score-pill ${scoreClass}">${score}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error("Error loading companies list:", err);
+            }
+        }
+
+        function toggleComparative(event, name) {
+            event.stopPropagation();
+            if (comparativeCompanies.includes(name)) {
+                comparativeCompanies = comparativeCompanies.filter(c => c !== name);
+            } else {
+                comparativeCompanies.push(name);
+            }
+            updateRadarChart();
+        }
+
+        async function selectCompany(name) {
+            currentCompany = name;
+            
+            // Highlight in list
+            document.querySelectorAll('.company-item').forEach(item => {
+                const itemLabel = item.querySelector('.company-name-label').innerText;
+                if (itemLabel === name) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Load trends and latest details
+            try {
+                const res = await fetch(`/api/companies/${encodeURIComponent(name)}/trends`);
+                const evaluations = await res.json();
+                
+                if (evaluations.length === 0) return;
+                
+                const latest = evaluations[evaluations.length - 1];
+                currentLatestEvaluation = latest;
+                updateTrackerFinal(latest);
+                
+                // Set Hero Details
+                const targetComp = allCompaniesCache.find(c => c.name === name);
+                document.getElementById('heroName').innerText = name;
+                document.getElementById('heroIndustry').innerText = targetComp ? targetComp.industry : "Analysis Target";
+                document.getElementById('heroSummary').innerText = latest.summary;
+                document.getElementById('heroScore').innerText = latest.overall_score.toFixed(1);
+
+                // Setup simulated telemetry display
+                // If it exists in trends, we can show it or simulate it
+                const domains = {"Back Market": "backmarket.com", "On Running": "on-running.com", "Skyscanner": "skyscanner.net"};
+                const dm = domains[name] || `${name.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+                
+                // Show telemetry metrics
+                const botStatus = name === "Back Market" ? "GPTBot allowed / Claude blocked" : "All Search bots allowed";
+                const stack = name === "Back Market" ? "Segment, Dynamic Yield, Amplitude" : name === "On Running" ? "Salesforce, GA4, Optimizely" : "Tealium, Mixpanel, LaunchDarkly";
+                const app = name === "Back Market" ? "4.7 ★ (125k reviews)" : name === "On Running" ? "4.8 ★ (8.9k reviews)" : "4.6 ★ (340k reviews)";
+                const aeo = name === "Back Market" ? "84/100 citations" : name === "On Running" ? "68/100 citations" : "91/100 citations";
+
+                document.getElementById('telRobots').innerText = botStatus;
+                document.getElementById('telStack').innerText = stack;
+                document.getElementById('telApp').innerText = app;
+                document.getElementById('telAEO').innerText = aeo;
+
+                // Render 8 Pillars Grid
+                const pillarsContainer = document.getElementById('pillarsGrid');
+                pillarsContainer.innerHTML = '';
+                
+                latest.pillars.forEach(p => {
+                    const score = p.score.toFixed(1);
+                    const percent = p.score * 10;
+                    
+                    let pClass = '';
+                    if (p.score >= 8.5) pClass = 'top-performer';
+                    
+                    pillarsContainer.innerHTML += `
+                        <div class="pillar-card ${pClass}" onclick="openModal('${p.pillar_number}')">
+                            <div class="pillar-header">
+                                <span class="pillar-title">${p.pillar_name}</span>
+                                <span class="pillar-number-badge">P${p.pillar_number}</span>
+                            </div>
+                            <div class="pillar-progress-wrapper">
+                                <div class="pillar-score-text">
+                                    <span class="p-score">${score}</span>
+                                    <span class="p-score-max">/10.0</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" style="width: ${percent}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Load Opportunities and Challenges
+                const oppsList = document.getElementById('oppsList');
+                oppsList.innerHTML = '';
+                latest.opportunities.forEach(o => {
+                    oppsList.innerHTML += `
+                        <li class="list-item list-item-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>${o}</span>
+                        </li>
+                    `;
+                });
+
+                const challsList = document.getElementById('challsList');
+                challsList.innerHTML = '';
+                latest.challenges.forEach(c => {
+                    challsList.innerHTML += `
+                        <li class="list-item list-item-warning">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span>${c}</span>
+                        </li>
+                    `;
+                });
+
+                // Dynamically build discovered best practices if present
+                const bpSection = document.getElementById('bpSection');
+                const bpGrid = document.getElementById('bpGrid');
+                bpGrid.innerHTML = '';
+                
+                // Preseed mock best practices for demo brands
+                let mockBPs = [];
+                if (name === "Back Market") {
+                    mockBPs = [
+                        {pillar: 5, name: "Growth Loops", desc: "Circular Economy Trade-in Funnel", details: "Creates dynamic product trade-in valuations instantly during shopping checkout loops, driving repeat purchases without paid ads."},
+                        {pillar: 2, name: "Content Strategy", desc: "Multilingual AEO Tagging", details: "Translates and structures user questions globally with detailed FAQ metadata schemas, indexed instantly by Perplexity."}
+                    ];
+                } else if (name === "Skyscanner") {
+                    mockBPs = [
+                        {pillar: 8, name: "Tools & Platforms", desc: "Agentic Travel Search API Ecosystem", details: "Exposes microservices specifically designed for AI agents to retrieve direct, formatted travel options asynchronously."},
+                        {pillar: 7, name: "Measurement & Attribution", desc: "Server-side Attribution Loop", details: "Routes user interaction telemetry via server-side analytics, bypassing standard browser-level cookie blocking."}
+                    ];
+                } else if (name === "On Running") {
+                    mockBPs = [
+                        {pillar: 1, name: "Product Experience", desc: "On Cyclon Subscription Model", details: "Fully circular product shoe subscription managed dynamically through automated mobile checkouts, generating 100% organic advocacy."}
+                    ];
+                }
+
+                if (mockBPs.length > 0) {
+                    bpSection.style.display = 'flex';
+                    mockBPs.forEach(bp => {
+                        bpGrid.innerHTML += `
+                            <div class="bp-card">
+                                <div class="bp-card-header">
+                                    <span class="bp-pillar-badge">Pillar ${bp.pillar} - ${bp.name}</span>
+                                    <i class="fa-solid fa-lightbulb" style="color: var(--accent-primary);"></i>
+                                </div>
+                                <div class="bp-description" style="font-weight:600;">${bp.desc}</div>
+                                <div class="bp-details">${bp.details}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    bpSection.style.display = 'none';
+                }
+
+                // Render charts
+                updateTrendChart(evaluations);
+                updateRadarChart();
+
+            } catch (err) {
+                console.error("Error selecting company:", err);
+            }
+        }
+
+        // Render Trend Chart (Line Chart over time)
+        function updateTrendChart(evaluations) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            
+            const labels = evaluations.map(e => {
+                const d = new Date(e.date);
+                return d.toLocaleDateString(undefined, {month: 'short', year: 'numeric'});
+            });
+            const data = evaluations.map(e => e.overall_score);
+
+            if (trendChartInstance) {
+                trendChartInstance.destroy();
+            }
+
+            trendChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Overall Growth Score',
+                        data: data,
+                        borderColor: '#00f2fe',
+                        backgroundColor: 'rgba(0, 242, 254, 0.05)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#00f2fe',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            min: 1.0,
+                            max: 10.0,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render Radar Comparison Chart
+        async function updateRadarChart() {
+            try {
+                const res = await fetch('/api/market/comparison');
+                const matrix = await res.json();
+                
+                const ctx = document.getElementById('radarChart').getContext('2d');
+                
+                const labels = [
+                    'P1: Product',
+                    'P2: Content & AEO',
+                    'P3: Personalization',
+                    'P4: Culture',
+                    'P5: Journey Loops',
+                    'P6: Distribution',
+                    'P7: Measurement',
+                    'P8: Tools'
+                ];
+
+                // Filters selected companies
+                const datasets = [];
+                const colors = [
+                    { border: '#00f2fe', bg: 'rgba(0, 242, 254, 0.05)' },
+                    { border: '#f59e0b', bg: 'rgba(245, 158, 11, 0.05)' },
+                    { border: '#10b981', bg: 'rgba(16, 185, 129, 0.05)' },
+                    { border: '#ef4444', bg: 'rgba(239, 68, 68, 0.05)' }
+                ];
+
+                matrix.companies.forEach((comp, idx) => {
+                    if (comparativeCompanies.includes(comp.company_name)) {
+                        const scores = [];
+                        for (let i = 1; i <= 8; i++) {
+                            scores.push(comp.scores[i] || 0);
+                        }
+                        
+                        const colorSet = colors[idx % colors.length];
+                        datasets.push({
+                            label: comp.company_name,
+                            data: scores,
+                            borderColor: colorSet.border,
+                            backgroundColor: colorSet.bg,
+                            borderWidth: 2,
+                            pointBackgroundColor: colorSet.border,
+                            pointHoverRadius: 5
+                        });
+                    }
+                });
+
+                if (radarChartInstance) {
+                    radarChartInstance.destroy();
+                }
+
+                radarChartInstance = new Chart(ctx, {
+                    type: 'radar',
+                    data: { labels, datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f8fafc', font: { family: 'Outfit' } },
+                                position: 'top'
+                            }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.05)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.08)' },
+                                pointLabels: { color: '#94a3b8', font: { size: 9, family: 'Inter' } },
+                                ticks: { display: false, color: '#94a3b8' },
+                                min: 0,
+                                max: 10,
+                                suggestedMin: 0,
+                                suggestedMax: 10
+                            }
+                        }
+                    }
+                });
+
+            } catch (err) {
+                console.error("Error updating radar chart:", err);
+            }
+        }
+
+        function resetSourcesTracker() {
+            const sources = ['blog', 'youtube', 'podcasts', 'pr', 'earnings', 'articles', 'recruitment', 'reddit', 'others'];
+            sources.forEach(src => {
+                const item = document.getElementById(`src-${src}`);
+                const status = document.getElementById(`status-${src}`);
+                if (item && status) {
+                    item.className = 'tracker-source-item';
+                    status.innerText = '⏳ Pending';
+                    status.style.color = 'var(--text-muted)';
+                }
+            });
+        }
+
+        function updateTrackerFromQuery(query) {
+            const q = query.toLowerCase();
+            let key = null;
+            if (q.includes('blog')) key = 'blog';
+            else if (q.includes('youtube') || q.includes('video') || q.includes('interview')) key = 'youtube';
+            else if (q.includes('podcast')) key = 'podcasts';
+            else if (q.includes('pr') || q.includes('press') || q.includes('release') || q.includes('announcement')) key = 'pr';
+            else if (q.includes('earnings') || q.includes('financial') || q.includes('revenue')) key = 'earnings';
+            else if (q.includes('article') || q.includes('news') || q.includes('teardown')) key = 'articles';
+            else if (q.includes('job') || q.includes('hiring') || q.includes('career') || q.includes('recruitment')) key = 'recruitment';
+            else if (q.includes('reddit')) key = 'reddit';
+            else key = 'others';
+            
+            const item = document.getElementById(`src-${key}`);
+            const status = document.getElementById(`status-${key}`);
+            if (item && status && status.innerText.includes('Pending')) {
+                item.classList.add('active-research');
+                status.innerText = '🔍 Researching';
+                status.style.color = 'var(--accent-primary)';
+            }
+        }
+
+        function updateTrackerFinal(latest) {
+            const sources = {
+                blog: { label: "Company Blog / Tech Blog", pattern: /blog|portal/i, found: false, positive: true },
+                youtube: { label: "Youtube Interviews", pattern: /youtube|video|interview/i, found: false, positive: true },
+                podcasts: { label: "Podcasts & Exec Audio", pattern: /podcast|audio|spotify/i, found: false, positive: true },
+                pr: { label: "Public / Press Releases", pattern: /pr|press|release|announcement/i, found: false, positive: true },
+                earnings: { label: "Earnings Call (financial)", pattern: /earnings|financial|quarterly|sec/i, found: false, positive: true },
+                articles: { label: "Articles & Teardowns", pattern: /article|news|teardown|nngroup/i, found: false, positive: true },
+                recruitment: { label: "Recruitment Portals (Jobs)", pattern: /job|hiring|career|recruitment|linkedin|glassdoor/i, found: false, positive: true },
+                reddit: { label: "Reddit Forums / Feedback", pattern: /reddit|subreddit/i, found: false, positive: false },
+                others: { label: "Others (Review sites, etc)", pattern: /trustpilot|reviews|google reviews|robots.txt|builtwith/i, found: false, positive: true }
+            };
+
+            // Scan supporting evidence
+            if (latest.pillars) {
+                latest.pillars.forEach(p => {
+                    if (p.supporting_evidence) {
+                        p.supporting_evidence.forEach(e => {
+                            const text = `${e.source} ${e.title} ${e.description}`.toLowerCase();
+                            for (const key in sources) {
+                                if (sources[key].pattern.test(text)) {
+                                    sources[key].found = true;
+                                    if (/complaint|friction|gap|lack|negative|slow|poor|fail|warning|issue|criticism/i.test(text)) {
+                                        sources[key].positive = false;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    if (p.weaknesses) {
+                        p.weaknesses.forEach(w => {
+                            const text = `${w.title} ${w.description}`.toLowerCase();
+                            for (const key in sources) {
+                                if (sources[key].pattern.test(text)) {
+                                    sources[key].found = true;
+                                    sources[key].positive = false;
+                                }
+                            }
+                        });
+                    }
+                    if (p.strengths) {
+                        p.strengths.forEach(s => {
+                            const text = `${s.title} ${s.description}`.toLowerCase();
+                            for (const key in sources) {
+                                if (sources[key].pattern.test(text)) {
+                                    sources[key].found = true;
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Update DOM
+            for (const key in sources) {
+                const item = document.getElementById(`src-${key}`);
+                const status = document.getElementById(`status-${key}`);
+                if (item && status) {
+                    item.className = 'tracker-source-item';
+                    if (sources[key].found) {
+                        if (sources[key].positive) {
+                            status.innerText = '✅ Positive';
+                            status.style.color = 'var(--accent-success)';
+                        } else {
+                            status.innerText = '⚠️ Gaps Found';
+                            status.style.color = 'var(--accent-warning)';
+                        }
+                    } else {
+                        status.innerText = '⚪ No Insights';
+                        status.style.color = 'var(--text-muted)';
+                    }
+                }
+            }
+        }
+
+        // Run analysis via SSE streaming
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
+            const companyName = document.getElementById('companyInput').value.trim();
+            const customContext = document.getElementById('contextInput').value.trim();
+
+            if (!companyName) {
+                alert("Please enter a company name.");
+                return;
+            }
+
+            // UI Adjustments
+            document.getElementById('analyzeBtn').disabled = true;
+            document.getElementById('analyzeBtn').innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Researching...`;
+            document.getElementById('terminalPanelWrapper').style.display = 'grid';
+            resetSourcesTracker();
+            
+            const logsContainer = document.getElementById('terminalLogs');
+            logsContainer.innerHTML = '';
+            
+            document.getElementById('terminalStatus').innerText = "Running Telemetry...";
+
+            // Setup SSE source
+            const url = `/api/evaluate/stream?company_name=${encodeURIComponent(companyName)}&custom_context=${encodeURIComponent(customContext)}`;
+            const eventSource = new EventSource(url);
+
+            eventSource.addEventListener('log', (event) => {
+                const entry = document.createElement('div');
+                entry.className = 'terminal-log-entry';
+                
+                if (event.data.startsWith('SYSTEM:')) {
+                    entry.className += ' terminal-log-system';
+                    document.getElementById('terminalStatus').innerText = event.data.substring(8, 35) + "...";
+                }
+                
+                entry.innerText = event.data;
+                logsContainer.appendChild(entry);
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+
+                // Update real-time sources tracker
+                updateTrackerFromQuery(event.data);
+            });
+
+            eventSource.addEventListener('telemetry', (event) => {
+                const entry = document.createElement('div');
+                entry.className = 'terminal-log-entry terminal-log-system';
+                entry.innerText = `[TELEMETRY SIGNALS RECEIVED] \n${event.data}`;
+                logsContainer.appendChild(entry);
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+            });
+
+            eventSource.addEventListener('result', async (event) => {
+                eventSource.close();
+                document.getElementById('terminalStatus').innerText = "COMPLETE!";
+                document.getElementById('analyzeBtn').disabled = false;
+                document.getElementById('analyzeBtn').innerHTML = `<i class="fa-solid fa-play"></i> Evaluate Brand`;
+                
+                // Clear input
+                document.getElementById('companyInput').value = "";
+                document.getElementById('contextInput').value = "";
+
+                // Reload and select
+                await loadCompanies();
+                
+                // Add to comparative if not already present
+                if (!comparativeCompanies.includes(companyName)) {
+                    comparativeCompanies.push(companyName);
+                }
+                
+                await selectCompany(companyName);
+            });
+
+            eventSource.addEventListener('error', (event) => {
+                eventSource.close();
+                document.getElementById('terminalStatus').innerText = "ERROR!";
+                document.getElementById('analyzeBtn').disabled = false;
+                document.getElementById('analyzeBtn').innerHTML = `<i class="fa-solid fa-play"></i> Evaluate Brand`;
+                
+                const entry = document.createElement('div');
+                entry.className = 'terminal-log-entry';
+                entry.style.color = '#ef4444';
+                entry.innerText = `CRITICAL ERROR: ${event.data}`;
+                logsContainer.appendChild(entry);
+            });
+        });
+
+        // Modal triggers
+        function openModal(number) {
+            if (!currentLatestEvaluation) return;
+            const p = currentLatestEvaluation.pillars.find(pillar => pillar.pillar_number == number);
+            if (!p) return;
+            
+            document.getElementById('modalPillarBadge').innerText = `PILLAR ${p.pillar_number}`;
+            document.getElementById('modalTitle').innerText = p.pillar_name;
+            
+            // Set company and layer category
+            const companyName = currentLatestEvaluation.company_name;
+            const layer = p.pillar_number <= 4 ? "Foundation Layer" : p.pillar_number <= 6 ? "Orchestration Layer" : "Intelligence Layer";
+            document.getElementById('modalHeaderMeta').innerText = `${companyName} · ${layer}`;
+            
+            // Set Score Pill (Nascent, Developing, Leading)
+            const scoreLabel = p.maturity_label || (p.score >= 8.0 ? "Leading" : p.score >= 4.0 ? "Developing" : "Nascent");
+            let scoreClass = 'score-mid';
+            if (p.score >= 8.0) scoreClass = 'score-high';
+            else if (p.score < 4.0) scoreClass = 'score-low';
+            
+            document.getElementById('modalScorePill').className = `score-pill ${scoreClass}`;
+            document.getElementById('modalScorePill').innerText = `${p.score.toFixed(1)} — ${scoreLabel}`;
+            
+            // Set Confidence
+            const confidencePercent = Math.round(p.confidence * 100);
+            const sourcesCount = p.supporting_evidence ? p.supporting_evidence.length : 0;
+            document.getElementById('modalConfidenceText').innerText = `High confidence · ${sourcesCount} sources`;
+            
+            // Set Portfolio/Market Average
+            const averages = {"1": 4.2, "2": 5.4, "3": 4.8, "4": 6.1, "5": 5.3, "6": 4.9, "7": 5.2, "8": 5.6};
+            const avg = averages[p.pillar_number] || 5.0;
+            document.getElementById('modalPillarAverage').innerText = `Market Average: ${avg}`;
+            
+            // Set Rationale
+            document.getElementById('modalRationaleText').innerText = p.score_rationale || "No rationale summary provided.";
+            
+            // Render Strengths
+            const strengthsContainer = document.getElementById('modalStrengthsList');
+            strengthsContainer.innerHTML = '';
+            if (p.strengths && p.strengths.length > 0) {
+                p.strengths.forEach(s => {
+                    strengthsContainer.innerHTML += `
+                        <div class="modal-sw-card">
+                            <div class="modal-sw-card-title" style="color: var(--accent-success);"><i class="fa-solid fa-circle-check"></i> ${s.title}</div>
+                            <div class="modal-sw-card-desc">${s.description}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                strengthsContainer.innerHTML = `<div class="modal-sw-card"><div class="modal-sw-card-desc">No specific strengths listed.</div></div>`;
+            }
+            
+            // Render Weaknesses
+            const weaknessesContainer = document.getElementById('modalWeaknessesList');
+            weaknessesContainer.innerHTML = '';
+            if (p.weaknesses && p.weaknesses.length > 0) {
+                p.weaknesses.forEach(w => {
+                    weaknessesContainer.innerHTML += `
+                        <div class="modal-sw-card">
+                            <div class="modal-sw-card-title" style="color: var(--accent-warning);"><i class="fa-solid fa-triangle-exclamation"></i> ${w.title}</div>
+                            <div class="modal-sw-card-desc">${w.description}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                weaknessesContainer.innerHTML = `<div class="modal-sw-card"><div class="modal-sw-card-desc">No specific weaknesses/gaps listed.</div></div>`;
+            }
+            
+            // Render Supporting Evidence
+            const evidenceContainer = document.getElementById('modalEvidenceList');
+            evidenceContainer.innerHTML = '';
+            document.getElementById('modalEvidenceTitle').innerText = `Supporting Evidence (${sourcesCount} items)`;
+            if (p.supporting_evidence && p.supporting_evidence.length > 0) {
+                p.supporting_evidence.forEach(e => {
+                    const text = `${e.source} ${e.title} ${e.description}`.toLowerCase();
+                    const isNegative = /complaint|friction|gap|lack|negative|slow|poor|fail|warning|issue|criticism/i.test(text);
+                    const borderColor = isNegative ? 'var(--accent-warning)' : 'var(--accent-success)';
+                    const indicator = isNegative ? '<i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-warning); margin-right: 0.4rem;"></i>' : '<i class="fa-solid fa-circle-check" style="color: var(--accent-success); margin-right: 0.4rem;"></i>';
+                    
+                    evidenceContainer.innerHTML += `
+                        <div class="modal-evidence-card" style="border-left: 4px solid ${borderColor};">
+                            <div class="modal-evidence-header">
+                                <span style="font-weight: 700; font-family: var(--font-display); color: var(--accent-primary);">${e.source}</span>
+                                <span class="modal-evidence-date">${e.date}</span>
+                            </div>
+                            <div class="modal-evidence-title" style="display: flex; align-items: center; gap: 0.25rem;">
+                                ${indicator} <span>${e.title}</span>
+                            </div>
+                            <div class="modal-evidence-desc">${e.description}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                evidenceContainer.innerHTML = `<div class="modal-evidence-card"><div class="modal-evidence-desc">No explicit evidence items captured.</div></div>`;
+            }
+            
+            document.getElementById('pillarModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('pillarModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
